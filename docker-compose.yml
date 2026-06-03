@@ -1,0 +1,79 @@
+version: "3.9"
+
+# ============================================================
+# A6_UAS_2388010021 — Docker Compose Orchestration
+# Menjalankan 3 service sekaligus:
+#   - web-statis  → port 80  (CV / Portfolio)
+#   - web-dinamis → port 3000 (LAPOR.ID Next.js)
+#   - db          → internal (MariaDB)
+# ============================================================
+
+services:
+
+  # ── Web Statis (CV/Portfolio) ────────────────────────────
+  web-statis:
+    build:
+      context: ./web-statis
+      dockerfile: Dockerfile
+    image: ${DOCKER_USERNAME:-nim2388010021}/web-statis:latest
+    container_name: uas_web_statis
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    networks:
+      - uas_network
+
+  # ── Database MariaDB ─────────────────────────────────────
+  db:
+    image: mariadb:11.2
+    container_name: uas_db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-root_password}
+      MYSQL_DATABASE: ${DB_NAME:-lapor_id}
+      MYSQL_USER: ${DB_USER:-lapor_user}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-lapor_password}
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./web-dinamis/sql/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    networks:
+      - uas_network
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      start_period: 30s
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ── Web Dinamis (LAPOR.ID Next.js) ──────────────────────
+  web-dinamis:
+    build:
+      context: ./web-dinamis
+      dockerfile: Dockerfile
+    image: ${DOCKER_USERNAME:-nim2388010021}/web-dinamis:latest
+    container_name: uas_web_dinamis
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_USER: ${DB_USER:-lapor_user}
+      DB_PASSWORD: ${DB_PASSWORD:-lapor_password}
+      DB_NAME: ${DB_NAME:-lapor_id}
+      SESSION_SECRET: ${SESSION_SECRET:-uas-secret-key-ganti-di-production-2024}
+      NODE_ENV: production
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - uas_network
+
+# ── Volumes & Networks ────────────────────────────────────
+volumes:
+  db_data:
+    driver: local
+
+networks:
+  uas_network:
+    driver: bridge

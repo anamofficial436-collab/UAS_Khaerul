@@ -1,0 +1,16 @@
+# Environment — JANGAN pernah commit ini!
+.env
+.env.local
+.env.*.local
+
+# Node
+node_modules/
+.next/
+npm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docker
+*.log
