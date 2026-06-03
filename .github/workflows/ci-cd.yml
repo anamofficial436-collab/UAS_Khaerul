@@ -5,6 +5,7 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
+  workflow_dispatch: {}
 
 # ============================================================
 # SECRETS yang harus ditambahkan di GitHub:
@@ -30,6 +31,7 @@ jobs:
     outputs:
       web-statis: ${{ steps.filter.outputs.web-statis }}
       web-dinamis: ${{ steps.filter.outputs.web-dinamis }}
+      deploy-config: ${{ steps.filter.outputs.deploy-config }}
     steps:
       - uses: actions/checkout@v4
 
@@ -42,6 +44,9 @@ jobs:
               - 'web-statis/**'
             web-dinamis:
               - 'web-dinamis/**'
+            deploy-config:
+              - 'docker-compose.yml'
+              - '.env.example'
 
   # ══════════════════════════════════════════════════════════
   # JOB 2: Build & Push — Web Statis
@@ -51,7 +56,7 @@ jobs:
     name: Build Web Statis
     runs-on: ubuntu-latest
     needs: detect-changes
-    if: ${{ needs.detect-changes.outputs.web-statis == 'true' || github.event_name == 'push' }}
+    if: ${{ needs.detect-changes.outputs.web-statis == 'true' || github.event_name == 'workflow_dispatch' }}
 
     steps:
       - name: Checkout code
@@ -85,7 +90,7 @@ jobs:
     name: Build Web Dinamis
     runs-on: ubuntu-latest
     needs: detect-changes
-    if: ${{ needs.detect-changes.outputs.web-dinamis == 'true' || github.event_name == 'push' }}
+    if: ${{ needs.detect-changes.outputs.web-dinamis == 'true' || github.event_name == 'workflow_dispatch' }}
 
     steps:
       - name: Checkout code
@@ -149,12 +154,16 @@ jobs:
     name: Deploy to EC2
     runs-on: ubuntu-latest
     needs: [build-web-statis, build-web-dinamis]
-    # Jalankan deploy jika minimal satu build sukses
+    # Hanya deploy pada push ke main ketika ada build sukses atau konfigurasi deploy berubah
     if: |
-      always() &&
+      github.event_name == 'push' &&
       (needs.build-web-statis.result == 'success' || needs.build-web-statis.result == 'skipped') &&
       (needs.build-web-dinamis.result == 'success' || needs.build-web-dinamis.result == 'skipped') &&
-      (needs.build-web-statis.result == 'success' || needs.build-web-dinamis.result == 'success')
+      (
+        needs.build-web-statis.result == 'success' ||
+        needs.build-web-dinamis.result == 'success' ||
+        needs.detect-changes.outputs.deploy-config == 'true'
+      )
 
     steps:
       - name: Checkout code
