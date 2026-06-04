@@ -96,7 +96,7 @@ body { font-family: 'Inter', system-ui, sans-serif; color: var(--gray-900); line
 .skill-tags { display: flex; flex-wrap: wrap; gap: 6px; }
 .skill-tags span { font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px; background: var(--white); border: 1px solid var(--gray-200); color: var(--gray-600); }
 .skill-bars { display: grid; gap: 16px; }
-.skill-bar-item {}
+
 .skill-bar-label { display: flex; justify-content: space-between; font-size: 14px; font-weight: 600; color: var(--gray-900); margin-bottom: 8px; }
 .skill-bar-track { background: var(--gray-100); border-radius: 20px; height: 8px; overflow: hidden; }
 .skill-bar-fill { height: 8px; border-radius: 20px; transition: width 1s ease; }
@@ -152,4 +152,15 @@ body { font-family: 'Inter', system-ui, sans-serif; color: var(--gray-900); line
   .project-card.featured { grid-column: span 1; }
   .timeline::before { display: none; }
   .footer-inner { justify-content: center; text-align: center; }
+}
+ .avatar-img-profile {
+  width: 200px;         /* Sesuaikan dengan ukuran avatar-wrap bawaanmu */
+  height: 200px;        /* Wajib sama dengan width agar bulat sempurna */
+  border-radius: 50%;   /* Membuat foto menjadi lingkaran */
+  object-fit: cover;    /* Memotong gambar secara otomatis agar tidak gepeng/stretch */
+  object-position: center; /* Memastikan fokus foto tetap di tengah */
+  border: 4px solid #ffffff; /* Efek list putih elegan di pinggiran foto */
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1); /* Efek bayangan halus */
+  position: relative;
+  z-index: 10;
 }
