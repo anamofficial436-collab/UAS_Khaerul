@@ -7,7 +7,7 @@ Platform pengaduan masyarakat digital berbasis Next.js 15, MariaDB, Docker Compo
 ## 🗂 Struktur Folder
 
 ```
-lapor-id/
+web-dinamis/
 ├── .github/
 │   └── workflows/
 │       └── ci-cd.yml           # GitHub Actions CI/CD pipeline
@@ -116,25 +116,25 @@ Buka: [http://localhost:3000](http://localhost:3000)
 
 ### 3. Akun Admin Default
 
-| Field    | Value     |
-|----------|-----------|
-| Username | `admin`   |
-| Password | `admin123`|
-| URL      | `/login`  |
+| Field    | Value      |
+| -------- | ---------- |
+| Username | `admin`    |
+| Password | `admin123` |
+| URL      | `/login`   |
 
 ---
 
 ## 🌐 API Endpoints
 
-| Method | Endpoint              | Auth    | Keterangan            |
-|--------|-----------------------|---------|-----------------------|
-| GET    | `/api/pengaduan`      | Public  | List semua pengaduan  |
-| POST   | `/api/pengaduan`      | Public  | Submit pengaduan baru |
-| GET    | `/api/pengaduan/:id`  | Public  | Detail pengaduan      |
-| PUT    | `/api/pengaduan/:id`  | Admin   | Update status         |
-| DELETE | `/api/pengaduan/:id`  | Admin   | Hapus pengaduan       |
-| POST   | `/api/auth/login`     | Public  | Login admin           |
-| POST   | `/api/auth/logout`    | Admin   | Logout                |
+| Method | Endpoint             | Auth   | Keterangan            |
+| ------ | -------------------- | ------ | --------------------- |
+| GET    | `/api/pengaduan`     | Public | List semua pengaduan  |
+| POST   | `/api/pengaduan`     | Public | Submit pengaduan baru |
+| GET    | `/api/pengaduan/:id` | Public | Detail pengaduan      |
+| PUT    | `/api/pengaduan/:id` | Admin  | Update status         |
+| DELETE | `/api/pengaduan/:id` | Admin  | Hapus pengaduan       |
+| POST   | `/api/auth/login`    | Public | Login admin           |
+| POST   | `/api/auth/logout`   | Admin  | Logout                |
 
 ---
 
@@ -144,11 +144,11 @@ Buka: [http://localhost:3000](http://localhost:3000)
 
 Tambahkan secrets berikut di repo → Settings → Secrets:
 
-| Secret         | Keterangan                              |
-|----------------|-----------------------------------------|
-| `EC2_HOST`     | IP/hostname EC2                         |
-| `EC2_USER`     | User SSH (biasanya `ubuntu`)            |
-| `EC2_SSH_KEY`  | Private key PEM untuk SSH               |
+| Secret        | Keterangan                   |
+| ------------- | ---------------------------- |
+| `EC2_HOST`    | IP/hostname EC2              |
+| `EC2_USER`    | User SSH (biasanya `ubuntu`) |
+| `EC2_SSH_KEY` | Private key PEM untuk SSH    |
 
 ### Setup EC2
 
