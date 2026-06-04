@@ -14,15 +14,13 @@ services:
       - "3306:3306"
     volumes:
       - mariadb_data:/var/lib/mysql
-      # Automasi Database: seeding otomatis dari init.sql lokal sesuai rubrik
-      - ./web-dinamis/sql/init.sql:/docker-entrypoint-initdb.d/init.sql
 
   web-statis:
     image: ${DOCKER_USERNAME}/web-statis:latest
     container_name: app_web_statis
     restart: always
     ports:
-      - "80:80" # Reverse proxy / Port 80 menampilkan Web Statis sesuai rubrik
+      - "80:80"
 
   web-dinamis:
     image: ${DOCKER_USERNAME}/web-dinamis:latest
@@ -31,14 +29,14 @@ services:
     ports:
       - "3000:3000"
     environment:
-      DB_HOST: mariadb # Menggunakan variabel DNS internal sesuai rubrik[cite: 1]
+      DB_HOST: mariadb
       DB_PORT: 3306
       DB_USER: lapor_user
       DB_PASSWORD: lapor_password
       DB_NAME: lapor_id
       SESSION_SECRET: ci-build-secret-not-for-production
     depends_on:
-      - mariadb # Memastikan urutan startup yang benar sesuai rubrik[cite: 1]
+      - mariadb
 
 volumes:
   mariadb_data:
