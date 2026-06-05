@@ -7,10 +7,10 @@ import { FileText, Shield, Eye, EyeOff, AlertCircle, Loader2 } from "lucide-reac
 
 export default function LoginPage() {
   const router = useRouter();
-  const [form, setForm] = useState({ username: "", password: "" });
-  const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [form, setForm]           = useState({ username: "", password: "" });
+  const [showPassword, setShow]   = useState(false);
+  const [error, setError]         = useState("");
+  const [loading, setLoading]     = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -21,124 +21,202 @@ export default function LoginPage() {
     setLoading(true);
     setError("");
     try {
-      const res = await fetch("/api/auth/login", {
-        method: "POST",
+      const res  = await fetch("/api/auth/login", {
+        method:  "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body:    JSON.stringify(form),
       });
       const data = await res.json();
       if (data.success) {
         router.push("/dashboard");
         router.refresh();
       } else {
-        setError(data.error || "Username atau password salah");
+        setError(data.error || "Login gagal");
       }
     } catch {
-      setError("Gagal terhubung ke server");
+      setError("Tidak dapat terhubung ke server");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary-900 via-primary-800 to-primary-700 flex items-center justify-center px-4 py-12">
-      <div className="w-full max-w-md animate-slide-up">
+    <div style={{
+      minHeight: "100vh",
+      background: "linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 60%, #2563eb 100%)",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      padding: "24px",
+      fontFamily: "Inter, Segoe UI, system-ui, sans-serif",
+    }}>
+      <div style={{ width: "100%", maxWidth: "420px" }}>
+
         {/* Logo */}
-        <div className="text-center mb-8">
-          <div className="inline-flex w-16 h-16 bg-white/15 rounded-2xl items-center justify-center mb-4 border border-white/20 backdrop-blur-sm">
-            <FileText size={28} className="text-white" />
+        <div style={{ textAlign: "center", marginBottom: "32px" }}>
+          <div style={{
+            width: "64px", height: "64px",
+            background: "rgba(255,255,255,0.15)",
+            borderRadius: "18px",
+            display: "flex", alignItems: "center", justifyContent: "center",
+            margin: "0 auto 14px",
+            border: "1px solid rgba(255,255,255,0.2)",
+          }}>
+            <FileText size={28} color="white" />
           </div>
-          <h1 className="text-3xl font-extrabold text-white tracking-tight">
+          <h1 style={{ fontSize: "28px", fontWeight: 800, color: "white", letterSpacing: "-0.03em", marginBottom: "4px" }}>
             LAPOR.ID
           </h1>
-          <p className="text-primary-200 text-sm mt-1">Portal Administrasi</p>
+          <p style={{ fontSize: "13px", color: "rgba(255,255,255,0.6)", fontWeight: 500 }}>
+            Portal Administrasi
+          </p>
         </div>
 
         {/* Card */}
-        <div className="bg-white rounded-2xl shadow-2xl p-8">
-          <div className="flex items-center gap-2 mb-6 pb-5 border-b border-gray-100">
-            <div className="w-8 h-8 bg-primary-100 rounded-lg flex items-center justify-center">
-              <Shield size={16} className="text-primary-700" />
+        <div style={{
+          background: "white",
+          borderRadius: "20px",
+          boxShadow: "0 25px 60px rgba(0,0,0,0.25)",
+          padding: "32px",
+        }}>
+          {/* Header card */}
+          <div style={{
+            display: "flex", alignItems: "center", gap: "10px",
+            marginBottom: "24px", paddingBottom: "20px",
+            borderBottom: "1px solid #f1f5f9",
+          }}>
+            <div style={{
+              width: "34px", height: "34px",
+              background: "#eff6ff", borderRadius: "10px",
+              display: "flex", alignItems: "center", justifyContent: "center",
+            }}>
+              <Shield size={16} color="#1d4ed8" />
             </div>
             <div>
-              <h2 className="font-bold text-gray-900 text-sm">Login Admin</h2>
-              <p className="text-xs text-gray-400">Masukkan kredensial Anda</p>
+              <div style={{ fontSize: "14px", fontWeight: 700, color: "#0f172a" }}>Login Admin</div>
+              <div style={{ fontSize: "12px", color: "#94a3b8" }}>Masukkan kredensial Anda</div>
             </div>
           </div>
 
+          {/* Error */}
           {error && (
-            <div className="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700 mb-5">
-              <AlertCircle size={15} className="shrink-0" />
-              {error}
+            <div style={{
+              display: "flex", alignItems: "flex-start", gap: "8px",
+              padding: "10px 14px",
+              background: "#fef2f2", border: "1px solid #fecaca",
+              borderRadius: "10px", marginBottom: "20px",
+              fontSize: "13px", color: "#dc2626",
+            }}>
+              <AlertCircle size={15} style={{ flexShrink: 0, marginTop: "1px" }} />
+              <span>{error}</span>
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label className="label">Username</label>
+          {/* Form */}
+          <form onSubmit={handleSubmit}>
+            {/* Username */}
+            <div style={{ marginBottom: "16px" }}>
+              <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: "#374151", marginBottom: "6px" }}>
+                Username
+              </label>
               <input
                 type="text"
                 placeholder="Masukkan username"
-                className="input-field"
-                value={form.username}
                 autoComplete="username"
+                value={form.username}
                 onChange={(e) => setForm({ ...form, username: e.target.value })}
+                style={{
+                  width: "100%", padding: "11px 14px",
+                  borderRadius: "10px", border: "1px solid #e2e8f0",
+                  fontSize: "14px", color: "#0f172a",
+                  outline: "none", boxSizing: "border-box",
+                  fontFamily: "inherit",
+                }}
+                onFocus={(e) => e.target.style.borderColor = "#1d4ed8"}
+                onBlur={(e)  => e.target.style.borderColor = "#e2e8f0"}
               />
             </div>
 
-            <div>
-              <label className="label">Password</label>
-              <div className="relative">
+            {/* Password */}
+            <div style={{ marginBottom: "24px" }}>
+              <label style={{ display: "block", fontSize: "13px", fontWeight: 600, color: "#374151", marginBottom: "6px" }}>
+                Password
+              </label>
+              <div style={{ position: "relative" }}>
                 <input
                   type={showPassword ? "text" : "password"}
                   placeholder="Masukkan password"
-                  className="input-field pr-10"
-                  value={form.password}
                   autoComplete="current-password"
-                  onChange={(e) =>
-                    setForm({ ...form, password: e.target.value })
-                  }
+                  value={form.password}
+                  onChange={(e) => setForm({ ...form, password: e.target.value })}
+                  style={{
+                    width: "100%", padding: "11px 42px 11px 14px",
+                    borderRadius: "10px", border: "1px solid #e2e8f0",
+                    fontSize: "14px", color: "#0f172a",
+                    outline: "none", boxSizing: "border-box",
+                    fontFamily: "inherit",
+                  }}
+                  onFocus={(e) => e.target.style.borderColor = "#1d4ed8"}
+                  onBlur={(e)  => e.target.style.borderColor = "#e2e8f0"}
                 />
                 <button
                   type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                  onClick={() => setShow(!showPassword)}
+                  style={{
+                    position: "absolute", right: "12px", top: "50%",
+                    transform: "translateY(-50%)",
+                    background: "none", border: "none", cursor: "pointer",
+                    color: "#94a3b8", padding: "0",
+                  }}
                 >
                   {showPassword ? <EyeOff size={17} /> : <Eye size={17} />}
                 </button>
               </div>
             </div>
 
+            {/* Submit button */}
             <button
               type="submit"
               disabled={loading}
-              className="w-full btn-primary justify-center py-3 mt-2 disabled:opacity-60 disabled:cursor-not-allowed"
+              style={{
+                width: "100%", padding: "12px",
+                background: loading ? "#93c5fd" : "#1e40af",
+                color: "white", border: "none",
+                borderRadius: "10px", fontSize: "14px", fontWeight: 700,
+                cursor: loading ? "not-allowed" : "pointer",
+                display: "flex", alignItems: "center", justifyContent: "center", gap: "8px",
+                fontFamily: "inherit", transition: "background .2s",
+              }}
             >
               {loading ? (
                 <>
-                  <Loader2 size={16} className="animate-spin" />
+                  <Loader2 size={16} style={{ animation: "spin 1s linear infinite" }} />
                   Memverifikasi...
                 </>
-              ) : (
-                "Masuk ke Dashboard"
-              )}
+              ) : "Masuk ke Dashboard"}
             </button>
           </form>
 
-          <div className="mt-6 pt-5 border-t border-gray-100 text-center">
-            <p className="text-xs text-gray-400">
+          {/* Footer */}
+          <div style={{ marginTop: "20px", paddingTop: "18px", borderTop: "1px solid #f1f5f9", textAlign: "center" }}>
+            <p style={{ fontSize: "12px", color: "#94a3b8", marginBottom: "6px" }}>
               Halaman ini hanya untuk administrator resmi.
             </p>
-            <Link href="/" className="text-xs text-primary-600 hover:underline mt-1 inline-block">
+            <Link href="/" style={{ fontSize: "12px", color: "#1d4ed8", textDecoration: "none" }}>
               ← Kembali ke Beranda
             </Link>
           </div>
         </div>
 
-        <p className="text-center text-primary-300 text-xs mt-6">
+        <p style={{ textAlign: "center", color: "rgba(255,255,255,0.4)", fontSize: "12px", marginTop: "20px" }}>
           © 2024 LAPOR.ID — Sistem Pengaduan Masyarakat
         </p>
       </div>
+
+      <style>{`
+        @keyframes spin { to { transform: rotate(360deg); } }
+        input:focus { outline: none; }
+      `}</style>
     </div>
   );
 }
