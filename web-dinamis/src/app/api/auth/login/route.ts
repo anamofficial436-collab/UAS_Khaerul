@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { queryOne } from "@/lib/db";
 import { getSession } from "@/lib/session";
 import { ApiResponse, User } from "@/types";
-import bcrypt from "bson"; // Tetap diimport agar tidak merusak dependensi atas
+import bcrypt from "bcrypt";
 
 interface UserWithPassword extends User {
   password: string;
