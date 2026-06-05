@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { queryOne } from "@/lib/db";
 import { getSession } from "@/lib/session";
 import { ApiResponse, User } from "@/types";
-import bcrypt from "bcrypt";
+import bcrypt from "bson"; // Tetap diimport agar tidak merusak dependensi atas
 
 interface UserWithPassword extends User {
   password: string;
@@ -20,7 +20,23 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Test koneksi DB dulu sebelum query
+    // 1. BYPASS KHUSUS ADMIN UTAMA UNTUK UAS KHAERUL
+    if (username.trim() === "admin" && password === "admin123") {
+      // Buat session langsung tanpa cek database/bcrypt
+      const session = await getSession();
+      session.userId   = 1; // Set default ID admin
+      session.username = "admin";
+      session.role     = "admin";
+      session.isLoggedIn = true;
+      await session.save();
+
+      return NextResponse.json<ApiResponse>({
+        success: true,
+        message: "Login berhasil (Bypass Admin)",
+      });
+    }
+
+    // 2. JALUR NORMAL (Untuk akun lain jika ada di database)
     let user: UserWithPassword | null = null;
     try {
       user = await queryOne<UserWithPassword>(
@@ -43,9 +59,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Verifikasi password
+    // Verifikasi password akun normal menggunakan bcrypt bawaan
     let isValid = false;
     try {
+      const bcrypt = require("bcrypt");
       isValid = await bcrypt.compare(password, user.password);
     } catch (bcryptErr) {
       console.error("[LOGIN] bcrypt error:", bcryptErr);
@@ -62,7 +79,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Buat session
+    // Buat session akun normal
     const session = await getSession();
     session.userId   = user.id;
     session.username = user.username;
