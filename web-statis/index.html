@@ -3,18 +3,22 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CV - Kh4erulll</title>
+  <title>CV — Khaerul | Teknik Informatika</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+
   <!-- Navbar -->
   <nav class="navbar">
     <div class="nav-inner">
       <div class="nav-brand">
-        <div class="nav-avatar">A</div>
-        <span class="nav-name">Khaerul Anam</span>
+        <div class="nav-logo">K</div>
+        <div>
+          <div class="nav-name">Khaerul</div>
+          <div class="nav-nim">2388010021</div>
+        </div>
       </div>
       <ul class="nav-links">
         <li><a href="#tentang">Tentang</a></li>
@@ -23,11 +27,11 @@
         <li><a href="#proyek">Proyek</a></li>
         <li><a href="#kontak" class="btn-nav">Hubungi Saya</a></li>
       </ul>
-      <button class="hamburger" onclick="toggleMenu()" aria-label="Menu">
+      <button class="hamburger" onclick="toggleMenu()">
         <span></span><span></span><span></span>
       </button>
     </div>
-    <ul class="nav-mobile" id="nav-mobile">
+    <ul class="nav-mobile" id="navMobile">
       <li><a href="#tentang" onclick="closeMenu()">Tentang</a></li>
       <li><a href="#keahlian" onclick="closeMenu()">Keahlian</a></li>
       <li><a href="#pendidikan" onclick="closeMenu()">Pendidikan</a></li>
@@ -38,120 +42,158 @@
 
   <!-- Hero -->
   <section class="hero" id="tentang">
-    <div class="hero-bg"></div>
+    <div class="hero-bg-shape shape1"></div>
+    <div class="hero-bg-shape shape2"></div>
     <div class="container hero-inner">
+
+      <!-- Foto profil kiri -->
+      <div class="hero-photo-wrap">
+        <div class="photo-ring-outer">
+          <div class="photo-ring-inner">
+            <!-- Foto Profil: ganti src="foto-kamu.jpg" dengan nama file foto kamu -->
+            <!-- Jika tidak punya foto, SVG avatar di bawah akan tampil -->
+            <img
+              src="foto.jpg"
+              alt="Foto Khaerul"
+              class="photo-img"
+              onerror="this.style.display='none'; document.getElementById('avatarFallback').style.display='flex';"
+            />
+            <!-- Avatar fallback (muncul jika foto.jpg tidak ada) -->
+            <div class="avatar-fallback" id="avatarFallback">
+              <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" width="160" height="160">
+                <!-- Background circle -->
+                <circle cx="100" cy="100" r="100" fill="#1d4ed8"/>
+                <!-- Body -->
+                <ellipse cx="100" cy="155" rx="55" ry="45" fill="#1e40af"/>
+                <!-- Head -->
+                <circle cx="100" cy="80" r="38" fill="#fbbf24"/>
+                <!-- Face - eyes -->
+                <circle cx="87" cy="75" r="5" fill="#1e3a8a"/>
+                <circle cx="113" cy="75" r="5" fill="#1e3a8a"/>
+                <!-- Face - smile -->
+                <path d="M 85 90 Q 100 102 115 90" stroke="#1e3a8a" stroke-width="3" fill="none" stroke-linecap="round"/>
+                <!-- Graduation cap -->
+                <rect x="72" y="46" width="56" height="8" rx="2" fill="#1e3a8a"/>
+                <polygon points="100,34 128,50 100,56 72,50" fill="#1e3a8a"/>
+                <line x1="128" y1="50" x2="133" y2="65" stroke="#1e3a8a" stroke-width="2.5"/>
+                <circle cx="133" cy="67" r="3" fill="#fbbf24"/>
+                <!-- Collar / shirt -->
+                <path d="M 65 143 L 82 125 L 100 135 L 118 125 L 135 143" fill="#3b82f6"/>
+                <!-- Tie -->
+                <polygon points="100,128 107,140 100,170 93,140" fill="#fbbf24"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+        <!-- Badge-badge floating -->
+        <div class="photo-badge b1">
+          <span class="badge-dot green"></span>
+          <span>Available</span>
+        </div>
+        <div class="photo-badge b2">☁️ AWS EC2</div>
+        <div class="photo-badge b3">🐳 Docker</div>
+        <div class="photo-stat">
+          <div class="pstat">
+            <div class="pstat-num">3.75</div>
+            <div class="pstat-lbl">IPK</div>
+          </div>
+          <div class="pstat-div"></div>
+          <div class="pstat">
+            <div class="pstat-num">8</div>
+            <div class="pstat-lbl">Semester</div>
+          </div>
+          <div class="pstat-div"></div>
+          <div class="pstat">
+            <div class="pstat-num">10+</div>
+            <div class="pstat-lbl">Proyek</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Teks kanan -->
       <div class="hero-text">
         <div class="hero-badge">
-          <span class="badge-dot"></span>
-          Mahasiswa Aktif — Semester 6
+          <span class="badge-dot pulse"></span>
+          Mahasiswa Aktif · Semester 8
         </div>
         <h1 class="hero-title">
-          Halo, Saya <br />
-          <span class="text-accent">Khaerul Anam</span>
+          Halo, Saya<br/>
+          <span class="accent">Khaerul</span> 👋
         </h1>
+        <p class="hero-nim">NIM: 2388010021 · Teknik Informatika</p>
         <p class="hero-sub">
-          Mahasiswa Teknik Informatika yang passionate di bidang
+          Mahasiswa Informatika yang passionate di bidang
           <strong>Web Development</strong>, <strong>DevOps</strong>, dan
           <strong>Administrasi Server</strong>. Berpengalaman membangun
-          aplikasi full-stack berbasis cloud.
+          aplikasi full-stack dengan CI/CD otomatis berbasis cloud AWS.
         </p>
         <div class="hero-actions">
           <a href="#proyek" class="btn-primary">Lihat Proyek Saya</a>
           <a href="#kontak" class="btn-secondary">Hubungi Saya</a>
         </div>
-        <div class="hero-stats">
-          <div class="stat">
-            <span class="stat-num">6</span>
-            <span class="stat-label">Semester</span>
-          </div>
-          <div class="stat-divider"></div>
-          <div class="stat">
-            <span class="stat-num">3.75</span>
-            <span class="stat-label">IPK</span>
-          </div>
-          <div class="stat-divider"></div>
-          <div class="stat">
-            <span class="stat-num">10+</span>
-            <span class="stat-label">Proyek</span>
-          </div>
+        <div class="hero-tags">
+          <span>Next.js</span>
+          <span>Docker</span>
+          <span>AWS EC2</span>
+          <span>GitHub Actions</span>
+          <span>MariaDB</span>
+          <span>Linux</span>
         </div>
       </div>
-      <div class="hero-image">
-        <div class="avatar-wrap">
-          <div class="avatar-ring"></div>
-          <img src="foto-profil.jpg" alt="Khaerul Anam" class="avatar-img-profile" />
-          <div class="avatar-badge-1">Next.js</div>
-          <div class="avatar-badge-2">Docker</div>
-          <div class="avatar-badge-3">AWS</div>
-        </div>
-      </div>
+
     </div>
   </section>
 
   <!-- Keahlian -->
   <section class="section bg-white" id="keahlian">
     <div class="container">
-      <div class="section-header">
-        <div class="section-tag">Kompetensi</div>
-        <h2 class="section-title">Keahlian Teknis</h2>
-        <p class="section-sub">Teknologi dan tools yang saya kuasai dalam pengembangan sistem dan aplikasi.</p>
+      <div class="sec-header">
+        <div class="sec-tag">Kompetensi</div>
+        <h2 class="sec-title">Keahlian Teknis</h2>
+        <p class="sec-sub">Teknologi dan tools yang saya kuasai selama kuliah dan proyek mandiri.</p>
       </div>
-      <div class="skills-grid">
+      <div class="skill-cards">
         <div class="skill-card">
-          <div class="skill-icon" style="background:#eff6ff; color:#1d4ed8;">🌐</div>
+          <div class="skill-ic" style="background:#eff6ff;color:#1d4ed8;">🌐</div>
           <h3>Web Development</h3>
-          <div class="skill-tags">
-            <span>Next.js</span><span>React</span><span>TypeScript</span>
-            <span>Tailwind CSS</span><span>Node.js</span>
-          </div>
+          <div class="tags"><span>Next.js 15</span><span>React</span><span>TypeScript</span><span>Tailwind CSS</span><span>Node.js</span></div>
         </div>
         <div class="skill-card">
-          <div class="skill-icon" style="background:#f0fdf4; color:#16a34a;">🐳</div>
+          <div class="skill-ic" style="background:#f0fdf4;color:#16a34a;">🐳</div>
           <h3>DevOps & Container</h3>
-          <div class="skill-tags">
-            <span>Docker</span><span>Docker Compose</span><span>GitHub Actions</span>
-            <span>CI/CD Pipeline</span><span>Nginx</span>
-          </div>
+          <div class="tags"><span>Docker</span><span>Docker Compose</span><span>GitHub Actions</span><span>CI/CD</span><span>Nginx</span></div>
         </div>
         <div class="skill-card">
-          <div class="skill-icon" style="background:#fff7ed; color:#ea580c;">☁️</div>
+          <div class="skill-ic" style="background:#fff7ed;color:#ea580c;">☁️</div>
           <h3>Cloud & Server</h3>
-          <div class="skill-tags">
-            <span>AWS EC2</span><span>Linux Ubuntu</span><span>SSH</span>
-            <span>MariaDB</span><span>PostgreSQL</span>
-          </div>
+          <div class="tags"><span>AWS EC2</span><span>Ubuntu Linux</span><span>SSH</span><span>MariaDB</span><span>phpMyAdmin</span></div>
         </div>
         <div class="skill-card">
-          <div class="skill-icon" style="background:#fdf4ff; color:#9333ea;">🤖</div>
-          <h3>AI & Data Science</h3>
-          <div class="skill-tags">
-            <span>Python</span><span>TensorFlow</span><span>OpenCV</span>
-            <span>Pandas</span><span>Jupyter</span>
-          </div>
+          <div class="skill-ic" style="background:#fdf4ff;color:#9333ea;">🤖</div>
+          <h3>AI & Data</h3>
+          <div class="tags"><span>Python</span><span>TensorFlow</span><span>OpenCV</span><span>Pandas</span><span>Jupyter</span></div>
         </div>
       </div>
-
-      <!-- Skill bars -->
       <div class="skill-bars">
-        <div class="skill-bar-item">
-          <div class="skill-bar-label"><span>Web Development</span><span>90%</span></div>
-          <div class="skill-bar-track"><div class="skill-bar-fill" style="width:90%; background:#1d4ed8;"></div></div>
+        <div class="bar-item">
+          <div class="bar-label"><span>Web Development</span><span>90%</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:90%;background:#1d4ed8;"></div></div>
         </div>
-        <div class="skill-bar-item">
-          <div class="skill-bar-label"><span>Docker & DevOps</span><span>85%</span></div>
-          <div class="skill-bar-track"><div class="skill-bar-fill" style="width:85%; background:#16a34a;"></div></div>
+        <div class="bar-item">
+          <div class="bar-label"><span>Docker & DevOps</span><span>85%</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:85%;background:#16a34a;"></div></div>
         </div>
-        <div class="skill-bar-item">
-          <div class="skill-bar-label"><span>Cloud (AWS)</span><span>80%</span></div>
-          <div class="skill-bar-track"><div class="skill-bar-fill" style="width:80%; background:#ea580c;"></div></div>
+        <div class="bar-item">
+          <div class="bar-label"><span>Cloud AWS</span><span>80%</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:80%;background:#ea580c;"></div></div>
         </div>
-        <div class="skill-bar-item">
-          <div class="skill-bar-label"><span>Database (SQL)</span><span>85%</span></div>
-          <div class="skill-bar-track"><div class="skill-bar-fill" style="width:85%; background:#9333ea;"></div></div>
+        <div class="bar-item">
+          <div class="bar-label"><span>Database (SQL)</span><span>85%</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:85%;background:#9333ea;"></div></div>
         </div>
-        <div class="skill-bar-item">
-          <div class="skill-bar-label"><span>AI / Machine Learning</span><span>75%</span></div>
-          <div class="skill-bar-track"><div class="skill-bar-fill" style="width:75%; background:#0891b2;"></div></div>
+        <div class="bar-item">
+          <div class="bar-label"><span>AI / Machine Learning</span><span>75%</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:75%;background:#0891b2;"></div></div>
         </div>
       </div>
     </div>
@@ -160,29 +202,29 @@
   <!-- Pendidikan -->
   <section class="section bg-gray" id="pendidikan">
     <div class="container">
-      <div class="section-header">
-        <div class="section-tag">Riwayat</div>
-        <h2 class="section-title">Pendidikan</h2>
+      <div class="sec-header">
+        <div class="sec-tag">Riwayat</div>
+        <h2 class="sec-title">Pendidikan</h2>
       </div>
       <div class="timeline">
-        <div class="timeline-item">
-          <div class="timeline-dot"></div>
-          <div class="timeline-card">
-            <div class="timeline-badge current">Sekarang</div>
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-card">
+            <span class="tl-badge current">Sedang Berlangsung</span>
             <h3>S1 Teknik Informatika</h3>
-            <p class="timeline-place">Universitas Islam Negeri Siber Syekh Nurjati — Cirebon</p>
-            <p class="timeline-year">2023 — Sekarang · IPK 3.75</p>
-            <p class="timeline-desc">Fokus pada Rekayasa Perangkat Lunak, Administrasi Server, dan Kecerdasan Buatan. Aktif dalam organisasi Himpunan Mahasiswa Informatika.</p>
+            <p class="tl-place">Universitas — Kota</p>
+            <p class="tl-year">2021 — Sekarang · IPK 3.75</p>
+            <p class="tl-desc">Fokus pada Rekayasa Perangkat Lunak, Administrasi Server, dan Kecerdasan Buatan. Aktif dalam kegiatan organisasi dan proyek kolaboratif.</p>
           </div>
         </div>
-        <div class="timeline-item">
-          <div class="timeline-dot"></div>
-          <div class="timeline-card">
-            <div class="timeline-badge">Lulus</div>
-            <h3>SMK</h3>
-            <p class="timeline-place">SMK 2 Al Hikmah 1 Benda — Brebes</p>
-            <p class="timeline-year">2021 — 2023</p>
-            <p class="timeline-desc">Jurusan Teknik Komputer dan Jaringan. Aktif dalam ekstrakulikuler IT dan olimpiade komputer tingkat kabupaten.</p>
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-card">
+            <span class="tl-badge">Lulus</span>
+            <h3>SMA / SMK</h3>
+            <p class="tl-place">Nama Sekolah — Kota</p>
+            <p class="tl-year">2018 — 2021</p>
+            <p class="tl-desc">Aktif dalam ekstrakulikuler IT dan olimpiade komputer tingkat kabupaten.</p>
           </div>
         </div>
       </div>
@@ -192,55 +234,44 @@
   <!-- Proyek -->
   <section class="section bg-white" id="proyek">
     <div class="container">
-      <div class="section-header">
-        <div class="section-tag">Portfolio</div>
-        <h2 class="section-title">Proyek Unggulan</h2>
-        <p class="section-sub">Proyek yang dikerjakan selama masa kuliah dan pembelajaran mandiri.</p>
+      <div class="sec-header">
+        <div class="sec-tag">Portfolio</div>
+        <h2 class="sec-title">Proyek Unggulan</h2>
+        <p class="sec-sub">Proyek yang dikerjakan selama kuliah dan pembelajaran mandiri.</p>
       </div>
-      <div class="projects-grid">
-        <div class="project-card featured">
-          <div class="project-header">
-            <div class="project-icon" style="background:#1d4ed8;">📋</div>
-            <div class="project-tags">
-              <span class="tag-featured">UAS 2026</span>
-            </div>
+      <div class="proj-grid">
+        <div class="proj-card featured">
+          <div class="proj-top">
+            <div class="proj-ic" style="background:#1d4ed8;">📋</div>
+            <span class="proj-tag">UAS 2024 · Unggulan</span>
           </div>
           <h3>LAPOR.ID — Sistem Pengaduan Masyarakat</h3>
-          <p>Platform pengaduan masyarakat digital berbasis Next.js dengan CI/CD otomatis menggunakan GitHub Actions dan deployment ke AWS EC2 via Docker.</p>
-          <div class="project-tech">
-            <span>Next.js 15</span><span>MariaDB</span><span>Docker</span>
-            <span>GitHub Actions</span><span>AWS EC2</span>
-          </div>
+          <p>Platform pengaduan masyarakat digital berbasis Next.js dengan CI/CD otomatis menggunakan GitHub Actions dan deployment ke AWS EC2 via Docker. Fitur: CRUD pengaduan, upload foto bukti, dashboard admin, export CSV.</p>
+          <div class="proj-tech"><span>Next.js 15</span><span>MariaDB</span><span>Docker</span><span>GitHub Actions</span><span>AWS EC2</span></div>
         </div>
-        <div class="project-card">
-          <div class="project-header">
-            <div class="project-icon" style="background:#16a34a;">🔧</div>
+        <div class="proj-card">
+          <div class="proj-top">
+            <div class="proj-ic" style="background:#16a34a;">⚙️</div>
           </div>
           <h3>CI/CD Pipeline Automation</h3>
-          <p>Implementasi pipeline CI/CD lengkap dengan GitHub Actions, Docker Hub registry, dan zero-downtime deployment ke cloud server.</p>
-          <div class="project-tech">
-            <span>GitHub Actions</span><span>Docker</span><span>Shell Script</span>
-          </div>
+          <p>Implementasi pipeline CI/CD lengkap dengan GitHub Actions, Docker Hub registry, dan zero-downtime deployment ke AWS EC2.</p>
+          <div class="proj-tech"><span>GitHub Actions</span><span>Docker Hub</span><span>Shell Script</span></div>
         </div>
-        <div class="project-card">
-          <div class="project-header">
-            <div class="project-icon" style="background:#ea580c;">🤖</div>
+        <div class="proj-card">
+          <div class="proj-top">
+            <div class="proj-ic" style="background:#ea580c;">🤖</div>
           </div>
           <h3>Computer Vision — Deteksi Objek</h3>
-          <p>Sistem deteksi objek real-time menggunakan YOLOv8 dan OpenCV untuk keperluan monitoring keamanan berbasis IoT.</p>
-          <div class="project-tech">
-            <span>Python</span><span>YOLOv8</span><span>OpenCV</span><span>MQTT</span>
-          </div>
+          <p>Sistem deteksi objek real-time menggunakan YOLOv8 dan OpenCV untuk monitoring keamanan berbasis IoT dan MQTT.</p>
+          <div class="proj-tech"><span>Python</span><span>YOLOv8</span><span>OpenCV</span><span>MQTT</span></div>
         </div>
-        <div class="project-card">
-          <div class="project-header">
-            <div class="project-icon" style="background:#9333ea;">📊</div>
+        <div class="proj-card">
+          <div class="proj-top">
+            <div class="proj-ic" style="background:#9333ea;">📊</div>
           </div>
-          <h3>Dashboard Monitoring Jaringan</h3>
-          <p>Dashboard real-time untuk monitoring performa server dan jaringan dengan alert otomatis via Telegram Bot.</p>
-          <div class="project-tech">
-            <span>Node.js</span><span>n8n</span><span>Grafana</span><span>Linux</span>
-          </div>
+          <h3>Dashboard Monitoring Server</h3>
+          <p>Dashboard real-time monitoring performa server dan jaringan dengan alert otomatis via Telegram Bot menggunakan n8n.</p>
+          <div class="proj-tech"><span>Node.js</span><span>n8n</span><span>Grafana</span><span>Linux</span></div>
         </div>
       </div>
     </div>
@@ -249,38 +280,38 @@
   <!-- Kontak -->
   <section class="section bg-dark" id="kontak">
     <div class="container">
-      <div class="section-header center">
-        <div class="section-tag light">Kontak</div>
-        <h2 class="section-title light">Mari Berkolaborasi</h2>
-        <p class="section-sub light">Terbuka untuk diskusi proyek, magang, atau kolaborasi riset.</p>
+      <div class="sec-header center">
+        <div class="sec-tag light">Kontak</div>
+        <h2 class="sec-title light">Mari Berkolaborasi</h2>
+        <p class="sec-sub light">Terbuka untuk diskusi proyek, magang, atau kolaborasi riset.</p>
       </div>
       <div class="contact-grid">
-        <a class="contact-card" href="mailto:ahmad@email.com">
-          <span class="contact-icon">✉️</span>
+        <a class="contact-card" href="mailto:khaerul@email.com">
+          <span>✉️</span>
           <div>
-            <div class="contact-label">Email</div>
-            <div class="contact-value">anamcirebonjeh@email.com</div>
+            <div class="c-label">Email</div>
+            <div class="c-val">khaerul@email.com</div>
           </div>
         </a>
-        <a class="contact-card" href="https://github.com" target="_blank">
-          <span class="contact-icon">🐙</span>
+        <a class="contact-card" href="https://github.com/kh4erulll" target="_blank">
+          <span>🐙</span>
           <div>
-            <div class="contact-label">GitHub</div>
-            <div class="contact-value">github.com/anamofficial436-collab</div>
+            <div class="c-label">GitHub</div>
+            <div class="c-val">github.com/kh4erulll</div>
           </div>
         </a>
-        <a class="contact-card" href="https://Instagram.com" target="_blank">
-          <span class="contact-icon">💼</span>
+        <a class="contact-card" href="https://linkedin.com" target="_blank">
+          <span>💼</span>
           <div>
-            <div class="contact-label">Instagram</div>
-            <div class="contact-value">instagram.com/username</div>
+            <div class="c-label">LinkedIn</div>
+            <div class="c-val">linkedin.com/in/khaerul</div>
           </div>
         </a>
-        <a class="contact-card" href="https://wa.me/6283140443663" target="_blank">
-          <span class="contact-icon">💬</span>
+        <a class="contact-card" href="https://wa.me/628123456789" target="_blank">
+          <span>💬</span>
           <div>
-            <div class="contact-label">WhatsApp</div>
-            <div class="contact-value">+62 831-4044-3663</div>
+            <div class="c-label">WhatsApp</div>
+            <div class="c-val">+62 812-3456-789</div>
           </div>
         </a>
       </div>
@@ -289,7 +320,7 @@
 
   <footer class="footer">
     <div class="container footer-inner">
-      <span>© 2026 Khaerul Anam — 2388010021</span>
+      <span>© 2024 Khaerul · NIM 2388010021</span>
       <span>Teknik Informatika · Administrasi Server</span>
     </div>
   </footer>
