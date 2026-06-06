@@ -10,10 +10,10 @@ export const sessionOptions: SessionOptions = {
   password: process.env.SESSION_SECRET || "lapor-id-fallback-secret-min-32-chars!!",
   cookieName: "lapor_id_session",
   cookieOptions: {
-    secure: process.env.NODE_ENV === "production",
-    httpOnly: true,
-    sameSite: "lax",
-    maxAge: 60 * 60 * 8, // 8 jam
+  secure: false, // <-- WAJIB FALSE di lokal agar pas di-push ke AWS tetap mengizinkan HTTP biasa!
+  httpOnly: true,
+  sameSite: "lax",
+  maxAge: 60 * 60 * 8, // 8 jam
   },
 };
 
