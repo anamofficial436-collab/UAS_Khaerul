@@ -124,8 +124,8 @@ jobs:
           cache-to: type=gha,mode=max
 
   # ══════════════════════════════════════════════════════════
-  # JOB 4: Deploy ke EC2 (Logika Dipermudah agar Selalu Jalan)
-  # ══════════════════════════════════════════════════════════
+# JOB 4: Deploy ke EC2 (Bebas Conflict, Pasti Centang Hijau!)
+# ══════════════════════════════════════════════════════════
   deploy:
     name: Deploy to EC2
     runs-on: ubuntu-latest
@@ -155,7 +155,6 @@ jobs:
             cd /home/ubuntu/uas
 
             echo "📦 Membereskan struktur folder di server..."
-            # Memaksa memindahkan file dari sub-folder ke root folder /uas/
             mv /home/ubuntu/uas/UAS_Khaerul/docker-compose.yml /home/ubuntu/uas/ 2>/dev/null || true
             mv /home/ubuntu/uas/UAS_Khaerul/.env.example /home/ubuntu/uas/ 2>/dev/null || true
             rm -rf /home/ubuntu/uas/UAS_Khaerul || true
@@ -172,8 +171,12 @@ jobs:
             echo "📥 Menarik Image Terbaru..."
             docker compose pull
 
-            echo "⚡ Menyalakan Layanan Microservices..."
-            docker compose up -d --remove-orphans
+            echo "🛑 MEMBERSIHKAN KONTAINER BENTROK..."
+            sudo docker rm -f app_web_dinamis app_web_statis b4e5fbd1af838d661036373bd21050237b03a7e3b32aa0e737ced4d1cbc0df9e || true
+            docker compose down --remove-orphans || true
+
+            echo "⚡ Menyalakan Layanan Microservices Baru..."
+            docker compose up -d
 
             echo "🧹 Pembersihan Image Lama..."
             docker image prune -f
