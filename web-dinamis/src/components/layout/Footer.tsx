@@ -98,7 +98,7 @@ export default function Footer() {
               </li>
               <li className="flex items-start gap-2">
                 <MapPin size={13} className="shrink-0 mt-0.5 text-primary-400" />
-                <span>Jl. Merdeka No. 1,<br />Jakarta Pusat 10110</span>
+                <span>Jl. Perjuangan No. 1,<br />Cirebon Kota 10110</span>
               </li>
               <li className="flex items-center gap-2">
                 <ExternalLink size={13} className="shrink-0 text-primary-400" />
