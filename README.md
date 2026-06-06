@@ -1,4 +1,4 @@
-# A6_UAS_2388010021 — Administrasi Server
+# UAS-Kaherul Anam — Administrasi Server
 
 > **Nama**: Khaerul Anam
 > **NIM**: 2388010021
@@ -227,5 +227,3 @@ Setiap kali `git push` ke branch `main`:
 | Cloud       | AWS EC2 (Ubuntu 22.04)               |
 | Registry    | Docker Hub                           |
 | Web Server  | Nginx (web-statis)                   |
-#   P e m i c u   D e p l o y  
- 
