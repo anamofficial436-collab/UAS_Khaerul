@@ -1,4 +1,4 @@
-name: CI/CD — UAS Administrasi Server (Optimized)
+name: CI/CD — UAS Administrasi Server
 
 on:
   push:
@@ -70,7 +70,7 @@ jobs:
           cache-to: type=gha,mode=max
 
   # ══════════════════════════════════════════════════════════
-  # JOB 3: Build & Push — Web Dinamis (Optimized)
+  # JOB 3: Build & Push — Web Dinamis (Sudah Diperbaiki)
   # ══════════════════════════════════════════════════════════
   build-web-dinamis:
     name: Build Web Dinamis
@@ -81,7 +81,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # Mengandalkan Docker Buildx sepenuhnya untuk build & caching (Lebih cepat dan clean)
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
@@ -94,7 +93,7 @@ jobs:
       - name: Build & Push web-dinamis image
         uses: docker/build-push-action@v5
         with:
-          context: ./web-web-dinamis
+          context: ./web-dinamis
           file: ./web-dinamis/Dockerfile
           push: true
           tags: |
@@ -104,13 +103,12 @@ jobs:
           cache-to: type=gha,mode=max
 
   # ══════════════════════════════════════════════════════════
-  # JOB 4: Deploy ke EC2 (Lebih Aman & Kebal False-Trigger)
+  # JOB 4: Deploy ke EC2 (Aman, Efisien, Bebas Konflik)
   # ══════════════════════════════════════════════════════════
   deploy:
     name: Deploy to EC2
     runs-on: ubuntu-latest
     needs: [detect-changes, build-web-statis, build-web-dinamis]
-    # Memastikan deploy HANYA jalan jika ada perubahan nyata atau dipicu manual, dan build tidak ada yang gagal
     if: |
       always() &&
       (needs.detect-changes.outputs.web-statis == 'true' || needs.detect-changes.outputs.web-dinamis == 'true' || needs.detect-changes.outputs.deploy-config == 'true' || github.event_name == 'workflow_dispatch') &&
@@ -139,21 +137,19 @@ jobs:
             set -e
             cd /home/ubuntu/uas
 
-            echo "🔐 Login ke Docker Hub..."
+            echo "🔐 Login ke Docker Hub di Server..."
             echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
             echo "🚀 Sinkronisasi Environment (.env)..."
             if [ ! -f .env ]; then
               cp .env.example .env
             fi
-            # Menggunakan pelindung '|| true' jika key belum terdaftar di .env.example
             sed -i "s|DOCKER_USERNAME=.*|DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}|" .env || echo "DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}" >> .env
 
-            echo "📥 Menarik Image Terbaru..."
+            echo "📥 Menarik Image Terbaru dari Docker Hub..."
             docker compose pull
 
             echo "🛑 Menghentikan kontainer lama yang berpotensi bentrok..."
-            # Menghapus kontainer berdasarkan nama service compose (jauh lebih aman dibanding hardcoded ID acak)
             docker compose down --remove-orphans || true
             sudo docker rm -f app_web_dinamis app_web_statis 2>/dev/null || true
 
