@@ -1,229 +1,115 @@
-# UAS-Kaherul Anam — Administrasi Server
+# 📑 DOKUMENTASI TEKNIS - DEPLOYMENT CLOUD & ORKESTRASI KONTANER
 
-> **Nama**: Khaerul Anam
-> **NIM**: 2388010021
-> **Kelas**: INF B
-> **Mata Kuliah**: Administrasi Server
+**UAS ADMINISTRASI SERVER**
+
+- **Nama Mahasiswa**: Khaerul Anam
+- **Program Studi**: Informatika
+- **Semester**: 6 (Enam)
+- **Kampus**: UIN Siber Syekh Nurjati Cirebon
+- **Repositori GitHub**: [anamofficial436-collab/UAS_Khaerul](https://github.com/anamofficial436-collab/UAS_Khaerul)
 
 ---
 
-## 📐 Arsitektur Sistem
+## 📋 PENDAHULUAN & ARSITEKTUR CI/CD
 
+Dokumentasi ini disusun untuk memenuhi kriteria penilaian UAS mata kuliah Administrasi Server. Proyek ini mengintegrasikan **Web Statis** dan **Web Dinamis** ke dalam satu infrastruktur cloud di **AWS EC2** yang diorkestrasikan menggunakan **Docker Compose** dan dideploy secara otomatis menggunakan **GitHub Actions** melalui pendekatan modern _Continuous Integration & Continuous Deployment (CI/CD)_.
+
+### 🌐 Alur Arsitektur Deployment & CI/CD
+
+1. **Push Trigger**: Setiap kali perubahan kode dilakukan dan di-`push` ke branch `main`, pipeline GitHub Actions akan terpicu secara otomatis.
+2. **Paths Filter (Smart Build)**: Pipeline mendeteksi folder mana yang mengalami perubahan menggunakan `paths-filter`. Jika hanya folder `web-dinamis` yang berubah, maka runner hanya akan memproses build untuk komponen tersebut demi menghemat efisiensi waktu eksekusi.
+3. **Build & Push Images**: GitHub Runner masuk ke **Docker Hub** menggunakan token kredensial terenkripsi. Kode dikompilasi langsung ke dalam Docker Image terpisah (`web-statis` dan `web-dinamis`) dengan memanfaatkan sistem caching GitHub Actions (`type=gha`), lalu dipublikasikan ke Docker Hub registry.
+4. **Deploy via SSH & SCP**: Konfigurasi `docker-compose.yml` serta `.env.example` ditransfer ke AWS EC2 menggunakan protokol SCP. Pipeline kemudian melakukan koneksi SSH remote ke VM EC2 untuk memperbarui environment, menarik (_pull_) image terbaru, membersihkan kontainer bentrok, dan menyalakan ulang layanan microservices dalam mode background (`detached mode`).
+
+### 📊 Diagram Arsitektur Sistem
+
+```mermaid
+graph TD
+    Dev[Khaerul Anam / Developer] -->|Git Push to main| GitHub[GitHub Repository]
+
+    subgraph "GitHub Actions Runner (CI)"
+        GitHub --> Work[Workflow deploy.yml]
+        Work -->|Paths-Filter| BuildStatis[Build Nginx Web Statis]
+        Work -->|Paths-Filter| BuildDinamis[Build Node.js/Next.js Web Dinamis]
+    end
+
+    BuildStatis -->|Push Image| DockerHub[(Docker Hub Registry)]
+    BuildDinamis -->|Push Image| DockerHub
+
+    Work -->|SCP Config Files| EC2[AWS EC2 Instance Host]
+    Work -->|SSH Remote Script| EC2
+
+    subgraph "Docker Compose Orchestration (AWS EC2 VM - CD)"
+        EC2 -->|Docker Compose Pull| DockerHub
+        EC2 --> Statis[app_web_statis Nginx:alpine]
+        EC2 --> Dinamis[app_web_dinamis Next.js Production]
+    end
+
+    User([Dosen Penguji / Pengguna]) -->|HTTP Port 80| Statis
+    User -->|HTTP Port 3000| Dinamis
+
+
+
+    DOKUMENTASI VERIFIKASI PENGUJIAN
+Berikut adalah galeri bukti pengujian teknis yang memverifikasi keberhasilan dari setiap tahapan deployment Administrasi Server:
+
+1. Struktur Workspace & Proyek di IDE
+Konfigurasi Workspace di Visual Studio Code (VS Code):
+Bukti susunan folder proyek di lokal komputer, memperlihatkan folder .github/workflows, web-statis, web-dinamis, serta file docker-compose.yml.
+
+![alt text](image-1.png)
+
+2. Tahap Inisialisasi AWS EC2 & Instalasi Docker
+Inisialisasi Virtual Machine AWS EC2:
+Bukti pembuatan instance Ubuntu Server baru di platform AWS Console yang digunakan sebagai server hosting.
+
+![alt text](image-2.png)
+
+Konfigurasi AWS Security Group:
+Pengaturan Inbound Rules di Security Group AWS EC2 yang membuka port akses masuk penting: port 22 (SSH), port 80 (HTTP Web Statis), dan port 3000 (HTTP Web Dinamis).
+
+![alt text](image-3.png)
+
+Instalasi Docker di Server Host VM:
+Bukti bahwa Docker Engine dan Docker Compose telah terpasang dengan benar di dalam sistem operasi Ubuntu server EC2.
+
+![alt text](image-4.png)
+
+3. Konfigurasi CI/CD & Registry Docker Hub
+Pembuatan Secrets Repository GitHub:
+Daftar variabel rahasia yang telah dienkripsi di menu Settings -> Secrets and Variables -> Actions pada repositori GitHub (EC2_HOST, EC2_USER, EC2_SSH_KEY, DOCKER_USERNAME, DOCKER_PASSWORD).
+
+![alt text](image-5.png)
+
+Registrasi Repositori Image di Docker Hub:
+Tampilan halaman Docker Hub yang memperlihatkan image hasil build pipeline telah sukses tersimpan di cloud registry.
+
+![alt text](image-6.png)
+
+4. Pipeline CI/CD & Proses Deployment
+Eksekusi Sukses GitHub Actions Workflow (Push to Deploy):
+Bukti pipeline GitHub Actions berjalan mulus dari atas sampai bawah hingga mendapatkan seluruh lambang centang hijau.
+
+![alt text](image-7.png)
+
+Proses Deploy di VM (SSH & Docker Compose Run):
+Log pada GitHub Actions yang menampilkan keberhasilan koneksi SSH ke EC2 dan penarikan image baru.
+
+![alt text](image-8.png)
+
+Verifikasi Kontainer yang Berjalan di VM (Docker PS):
+Output dari eksekusi perintah sudo docker ps langsung di dalam terminal server EC2, membuktikan kontainer aplikasi aktif dan mendengarkan pada port masing-masing.
+
+![alt text](image-9.png)
+
+5. Verifikasi Akses Port & Fungsionalitas Web
+Akses Web Statis (Port 80):
+Halaman web statis yang sukses diakses secara publik melalui IP Address publik AWS EC2 pada port 80.
+
+![alt text](image-10.png)
+
+Akses Web Dinamis (Port 3000):
+Aplikasi web dinamis yang sukses diakses secara publik menggunakan IP Address publik AWS EC2 dengan port khusus :3000.
+
+![alt text](image-11.png)
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                    DEVELOPER (Lokal)                        │
-│  git push → branch main                                     │
-└──────────────────────┬──────────────────────────────────────┘
-                       │
-                       ▼
-┌─────────────────────────────────────────────────────────────┐
-│              GITHUB ACTIONS (CI/CD Pipeline)                │
-│                                                             │
-│  ┌─────────────────┐       ┌──────────────────────────┐    │
-│  │  detect-changes │──────▶│  Paths Filter             │    │
-│  │  (dorny/filter) │       │  web-statis/** → Job 2   │    │
-│  └─────────────────┘       │  web-dinamis/** → Job 3  │    │
-│                             └──────────────────────────┘    │
-│                                                             │
-│  ┌────────────────┐   ┌────────────────────────────────┐   │
-│  │ build-web-     │   │ build-web-dinamis               │   │
-│  │ statis         │   │ ① npm ci → lint → tsc → build  │   │
-│  │ ① Docker build │   │ ② Docker build                 │   │
-│  │ ② Push ke Hub  │   │ ③ Push ke Docker Hub           │   │
-│  └───────┬────────┘   └──────────────┬─────────────────┘   │
-│          └──────────────┬────────────┘                      │
-│                         ▼                                    │
-│               ┌─────────────────┐                           │
-│               │   deploy job    │                           │
-│               │  SSH ke EC2     │                           │
-│               │  docker pull    │                           │
-│               │  docker compose │                           │
-│               │  up -d          │                           │
-│               └─────────────────┘                           │
-└──────────────────────┬──────────────────────────────────────┘
-                       │ SSH + docker compose up
-                       ▼
-┌─────────────────────────────────────────────────────────────┐
-│                  AWS EC2 (Ubuntu 22.04)                     │
-│  Instance: UAS-NIM | Type: t2.micro                        │
-│                                                             │
-│  ┌──────────────────────────────────────────────────────┐  │
-│  │              Docker Network: uas_network              │  │
-│  │                                                       │  │
-│  │  ┌─────────────┐  ┌──────────────┐  ┌─────────────┐ │  │
-│  │  │  web-statis │  │ web-dinamis  │  │     db      │ │  │
-│  │  │  Nginx:80   │  │  Next.js     │  │  MariaDB    │ │  │
-│  │  │  Port: 80   │  │  Port: 3000  │  │  Internal   │ │  │
-│  │  │  CV/Portofo │  │  LAPOR.ID    │  │  Port 3306  │ │  │
-│  │  └─────────────┘  └──────────────┘  └─────────────┘ │  │
-│  └──────────────────────────────────────────────────────┘  │
-│                                                             │
-│  Volume: db_data (MariaDB persistent)                       │
-└─────────────────────────────────────────────────────────────┘
-```
-
----
-
-## 🗂 Struktur Repository
-
-```
-UAS_ANAM/
-├── .github/
-│   └── workflows/
-│       └── ci-cd.yml          ← CI/CD pipeline utama
-├── web-statis/                ← CV / Portfolio (Nginx)
-│   ├── index.html
-│   ├── style.css
-│   ├── script.js
-│   ├── nginx.conf
-│   └── Dockerfile
-├── web-dinamis/               ← LAPOR.ID (Next.js + MariaDB)
-│   ├── src/
-│   │   ├── app/               ← Next.js App Router pages
-│   │   ├── components/        ← React components
-│   │   ├── lib/               ← db, session, utils
-│   │   └── types/             ← TypeScript types
-│   ├── sql/
-│   │   └── init.sql           ← Schema + seeding otomatis
-│   ├── Dockerfile
-│   └── ...
-├── docker-compose.yml         ← Orkestrasi semua service
-├── .env.example               ← Template environment variables
-├── .gitignore
-└── README.md
-```
-
----
-
-## 🚀 Cara Menjalankan
-
-### Opsi 1 — Docker Compose (Rekomendasi)
-
-```bash
-# 1. Clone repository
-git clone https://github.com/USERNAME/A6_UAS_2388010021.git
-cd A6_UAS_2388010021
-
-# 2. Buat file .env
-cp .env.example .env
-# Edit .env sesuai konfigurasi kamu (minimal DOCKER_USERNAME)
-
-# 3. Jalankan semua service
-docker compose up -d --build
-
-# 4. Cek status
-docker compose ps
-```
-
-Akses:
-
-- **Web Statis (CV)**: http://localhost:80
-- **Web Dinamis (LAPOR.ID)**: http://localhost:3000
-
----
-
-### Opsi 2 — Development Lokal (Next.js)
-
-```bash
-cd web-dinamis
-npm install
-# Edit .env.local sesuai DB lokal
-npm run dev
-```
-
----
-
-## 🔐 GitHub Actions Secrets
-
-Tambahkan secrets berikut di **GitHub → Settings → Secrets and variables → Actions**:
-
-| Secret            | Nilai               | Keterangan                         |
-| ----------------- | ------------------- | ---------------------------------- |
-| `DOCKER_USERNAME` | `userkamu`          | Username Docker Hub                |
-| `DOCKER_PASSWORD` | `•••••••`           | Password / Access Token Docker Hub |
-| `EC2_HOST`        | `xx.xx.xx.xx`       | IP Publik EC2                      |
-| `EC2_USER`        | `ubuntu`            | User SSH EC2                       |
-| `EC2_SSH_KEY`     | `-----BEGIN RSA...` | Isi file `.pem` (private key)      |
-
----
-
-## ⚙️ Setup EC2 (Pertama Kali)
-
-```bash
-# 1. SSH ke EC2
-ssh -i your-key.pem ubuntu@<EC2-IP>
-
-# 2. Install Docker
-curl -fsSL https://get.docker.com | sh
-sudo usermod -aG docker ubuntu
-newgrp docker
-
-# 3. Install Docker Compose plugin
-sudo apt install -y docker-compose-plugin
-
-# 4. Buat direktori project
-mkdir -p ~/uas
-
-# 5. Buka port di Security Group AWS:
-#    Port 22  (SSH)
-#    Port 80  (Web Statis)
-#    Port 3000 (Web Dinamis)
-```
-
----
-
-## 🌐 URL Akses (Production)
-
-| Service                | URL                              |
-| ---------------------- | -------------------------------- |
-| Web Statis (CV)        | `http://<EC2-IP>:80`             |
-| Web Dinamis (LAPOR.ID) | `http://<EC2-IP>:3000`           |
-| Login Admin            | `http://<EC2-IP>:3000/login`     |
-| Dashboard              | `http://<EC2-IP>:3000/dashboard` |
-
----
-
-## 👤 Akun Admin Default
-
-| Field    | Value      |
-| -------- | ---------- |
-| Username | `admin`    |
-| Password | `admin123` |
-
----
-
-## 🔄 Alur CI/CD
-
-Setiap kali `git push` ke branch `main`:
-
-1. **detect-changes** — cek folder mana yang berubah (paths filter)
-2. **build-web-statis** — berjalan _hanya_ jika `web-statis/**` berubah
-3. **build-web-dinamis** — berjalan _hanya_ jika `web-dinamis/**` berubah
-   - lint → TypeScript check → build → docker push
-4. **deploy** — SSH ke EC2, `docker pull` + `docker compose up -d`
-
-> Zero-touch deployment: dari `git push` hingga live di EC2 **tanpa intervensi manual**.
-
----
-
-## 📦 Docker Images
-
-| Image                                  | Registry   | Keterangan        |
-| -------------------------------------- | ---------- | ----------------- |
-| `{DOCKER_USERNAME}/web-statis:latest`  | Docker Hub | Nginx + CV static |
-| `{DOCKER_USERNAME}/web-dinamis:latest` | Docker Hub | Next.js LAPOR.ID  |
-
----
-
-## 🛠 Teknologi
-
-| Kategori    | Stack                                |
-| ----------- | ------------------------------------ |
-| Web Dinamis | Next.js 15, TypeScript, Tailwind CSS |
-| Database    | MariaDB 11.2                         |
-| Web Statis  | HTML5, CSS3, JavaScript (Vanilla)    |
-| Container   | Docker, Docker Compose               |
-| CI/CD       | GitHub Actions                       |
-| Cloud       | AWS EC2 (Ubuntu 22.04)               |
-| Registry    | Docker Hub                           |
-| Web Server  | Nginx (web-statis)                   |
