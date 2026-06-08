@@ -3,7 +3,7 @@ import "./globals.css";
 import { ToastProvider } from "@/components/ui/Toast";
 
 export const metadata: Metadata = {
-  title: "LAPOR.ID - Sistem Pengaduan Masyarakat",
+  title: "Khaerul Anam - 2388010021",
   description:
     "Platform pengaduan masyarakat digital yang transparan, cepat, dan terpercaya.",
   keywords: "pengaduan, masyarakat, lapor, pemerintah, digital",
