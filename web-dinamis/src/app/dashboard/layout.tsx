@@ -24,7 +24,7 @@ export default async function DashboardLayout({
 
           {/* Title - visible on mobile */}
           <div className="lg:hidden flex items-center gap-2">
-            <span className="font-bold text-primary-800">LAPOR.ID</span>
+            <span className="font-bold text-primary-800">Khaerul Anam - 2388010021</span>
             <span className="text-xs text-gray-400">Admin</span>
           </div>
 
